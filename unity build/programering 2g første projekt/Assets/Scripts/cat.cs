@@ -53,13 +53,14 @@ public class cat : MonoBehaviour
 
     void Eat()                                              //Eat-metoden
     {
-        GameObject closestGrass;                            //Lokal gameobject-variabel til det nærmeste stykke mad
+        GameObject closestfood;                            //Lokal gameobject-variabel til det nærmeste stykke mad
         float shortestDistance = 9999;                      //lokal float-variabel til at holde den korteste afstand til et stykke mad
 
         foreach (GameObject food in allFood)              //foreach er ligesom et for-loop, bare det kører igennem alle elementer i en liste eller et array
         {
             if (food == null)                              //Hvis maden ikke eksisterer
             {
+                allFood.Remove(food);
                 continue;                                   //foreach-loopet springer resten af sin kode over, og kører videre til næste iteration
             }
 
@@ -68,15 +69,15 @@ public class cat : MonoBehaviour
 
 
                 shortestDistance = Vector3.Distance(food.transform.position, this.transform.position);             //shortestDistance = afstanden mellem løve og mad
-                closestGrass = food;                                                                               //Det stykke mad foreach-loopet arbejder på lige nu, gemmes i variablen closestFood
-                agent.SetDestination(closestGrass.transform.position);                                              //Dette stykke mad sættes som agentens (løvens) destination
+                closestfood = food;                                                                               //Det stykke mad foreach-loopet arbejder på lige nu, gemmes i variablen closestFood
+                agent.SetDestination(closestfood.transform.position);                                              //Dette stykke mad sættes som agentens (løvens) destination
             }
         }
     }
 
     private void OnTriggerEnter(Collider other)             //metode som bliver kaldt når et gameobject rammer ind i den runde trigger der sidder på løven
     {
-        if (other.tag == "Horse"||other.tag=="lion")
+        if (other.tag == "Horse"||other.tag=="Lion")
         {
             allFood.Add(other.gameObject);
         }
@@ -84,7 +85,7 @@ public class cat : MonoBehaviour
 
     private void OnTriggerExit(Collider other)              //metode som bliver kaldt når et gameobject bevæger sig ud af den runde trigger der sidder på løven
     {
-        if (other.tag == "Horse"||other.tag=="lion")
+        if (other.tag == "Horse"||other.tag=="Lion")
         {
             allFood.Remove(other.gameObject);
         }
@@ -92,7 +93,7 @@ public class cat : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)          //Metode som kaldes når løven fysisk rammer ind i noget
     {
-        if (collision.collider.tag == "Horse"|| collision.collider.tag =="lion")                  //Hvis det løven rammer er tagget "Horse"
+        if (collision.collider.tag == "Horse")                 //Hvis det løven rammer er tagget "Horse"
         {
             foodEaten += 1;
 
@@ -109,7 +110,26 @@ public class cat : MonoBehaviour
             myState = State.Sleep;
             StartCoroutine(WakeUpInXSeconds(5));
         }
+        if (collision.collider.tag == "Lion")                 //Hvis det løven rammer er tagget "Horse"
+        {
+            foodEaten += 1;
+
+
+            if (foodEaten >= foodRequiredToGiveBirth && grown == true && numberOfcats < maxcats)     //hvis der er spist nok OG grown == true OG antal løver er under maxLions
+            {
+                foodEaten = 0;
+                StartCoroutine(GiveBirth());                    //Starter coroutine
+            }
+
+            allFood.Remove(collision.collider.gameObject);     //Fjern det stykke mad fra listen allFood
+            collision.collider.gameObject.GetComponent<Lion>().DecreaseNumberOglionsByOne();   //Kalder en metode der nedsætter variablen NumberOfHorses med 1. Vi kan ikke ændre denne variabel direkte fra denne klasse da den er static
+            Destroy(collision.collider.gameObject);             //Fjern det stykke mad helt fra spillet
+            myState = State.Sleep;
+            StartCoroutine(WakeUpInXSeconds(5));
+        }
     }
+
+  
 
     IEnumerator GiveBirth()
     {

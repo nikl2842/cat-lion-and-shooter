@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Lion
   - Terrain
+  - cat
   layers:
   - Default
   - TransparentFX

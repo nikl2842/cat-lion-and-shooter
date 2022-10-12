@@ -125,6 +125,7 @@ public class Horse : MonoBehaviour
         {
             if (grass == null)                              //Hvis græsset ikke eksisterer
             {
+                allGrass.Remove(grass);
                 continue;                                   //foreach-loopet springer resten af sin kode over, og kører videre til næste iteration
             }
 

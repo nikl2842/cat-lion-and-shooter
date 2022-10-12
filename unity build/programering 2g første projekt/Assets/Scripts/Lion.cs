@@ -53,25 +53,26 @@ public class Lion : MonoBehaviour
 
     void Eat()                                              //Eat-metoden
     {
-        GameObject closestGrass;                            //Lokal gameobject-variabel til det nærmeste stykke mad
+        GameObject closestfood;                            //Lokal gameobject-variabel til det nærmeste stykke mad
         float shortestDistance = 9999;                      //lokal float-variabel til at holde den korteste afstand til et stykke mad
 
         foreach (GameObject food in allFood)              //foreach er ligesom et for-loop, bare det kører igennem alle elementer i en liste eller et array
         {
             if (food == null)                              //Hvis maden ikke eksisterer
             {
+                allFood.Remove(food);
                 continue;                                   //foreach-loopet springer resten af sin kode over, og kører videre til næste iteration
             }
 
-            if (Vector3.Distance(food.transform.position,this.transform.position) < shortestDistance)              //this afstanen mellem mad og løve er mindre end shortestDistance
+            if (Vector3.Distance(food.transform.position, this.transform.position) < shortestDistance)              //this afstanen mellem mad og løve er mindre end shortestDistance
             {
-                
+
 
                 shortestDistance = Vector3.Distance(food.transform.position, this.transform.position);             //shortestDistance = afstanden mellem løve og mad
-                closestGrass = food;                                                                               //Det stykke mad foreach-loopet arbejder på lige nu, gemmes i variablen closestFood
-                agent.SetDestination(closestGrass.transform.position);                                              //Dette stykke mad sættes som agentens (løvens) destination
+                closestfood = food;                                                                               //Det stykke mad foreach-loopet arbejder på lige nu, gemmes i variablen closestFood
+                agent.SetDestination(closestfood.transform.position);                                              //Dette stykke mad sættes som agentens (løvens) destination
             }
-        }       
+        }
     }
 
     private void OnTriggerEnter(Collider other)             //metode som bliver kaldt når et gameobject rammer ind i den runde trigger der sidder på løven
@@ -144,6 +145,9 @@ public class Lion : MonoBehaviour
         yield return new WaitForSeconds(time);
         myState = State.Eat;
     }
+    public void DecreaseNumberOglionsByOne()
+    {
+        numberOfLions--;
+    }
 
-    
 }
