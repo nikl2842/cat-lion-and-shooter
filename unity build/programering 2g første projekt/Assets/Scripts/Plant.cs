@@ -30,12 +30,14 @@ public class Plant : MonoBehaviour
     
     void Update()
     {
-        timeLived = timeLived + Time.deltaTime;                                     //der lægges lidt til tiden planten har levet
+         timeLived = timeLived + Time.deltaTime;                                     //der lægges lidt til tiden planten har levet
 
         if (timeLived > lifeExpectancy && startedDying == false)                    //hvis tiden planten har levet er større end plantens levetid
         {
             StartCoroutine("Die");                                                  //starter coroutine Die()
-        }
+        }                                   //der lægges lidt til tiden planten har levet
+
+     
     }
 
     public void ResetGlobalVariableValues()                                                //sætter nogle globale variabler til nogle startværdier fordi Unity ved en fejl kopierer de gamle værdier fra planten som en ny plante kommer fra
