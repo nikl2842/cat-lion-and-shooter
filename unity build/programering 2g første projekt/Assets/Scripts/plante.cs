@@ -42,7 +42,7 @@ public class plante : MonoBehaviour
 
 
         growx = "grow1mm";
-        print(growx);
+        //print(growx);
 
 
     }

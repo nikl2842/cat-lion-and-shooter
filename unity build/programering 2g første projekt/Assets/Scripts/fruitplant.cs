@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class fruitplant : Plant
-
+    
 {
     public GameObject fruit;
     public float fruitspawntime;
@@ -11,21 +11,25 @@ public class fruitplant : Plant
     public float fruitspawnradius;
     public float maxfruit;
     public float spawnfruitheight;
-    public bool fruitspawned = false;
+    public int numberoffruitspawns;
+    public float timepassedbetweenfruitspawn;
+    public float timebetweenfruitspawn;
     // Start is called before the first frame update
     void Start()
     {
-       
+      
     }
 
     // Update is called once per frame
     void Update()
     {
+        timepassedbetweenfruitspawn = timepassedbetweenfruitspawn + Time.deltaTime;
         timeLived = timeLived + Time.deltaTime;
-        if (fruitspawntime < timeLived && fruitspawned == false)
+        if (fruitspawntime < timeLived  && numberoffruitspawns>0 && timepassedbetweenfruitspawn > timebetweenfruitspawn)
         {
             spawnfruit();
-            
+            numberoffruitspawns = numberoffruitspawns - 1;
+            timepassedbetweenfruitspawn = 0;
         }
    
        
@@ -41,7 +45,7 @@ public class fruitplant : Plant
             Vector3 fruitspawnlocation = transform.position + Random.insideUnitSphere * fruitspawnradius;
             GameObject newfruit = Instantiate(fruit, fruitspawnlocation+new Vector3(0,spawnfruitheight,0), Quaternion.identity);
             StartCoroutine(despawnfruit(newfruit));
-            fruitspawned = true;
+            
         }
 
     }
